@@ -88,10 +88,34 @@ const Header = () => {
             </div>
         )
         }
-            console.log(returnArr)
+        console.log(parks)
             return returnArr
 
     }
+    const viewAllParks = (parks)=>{
+        var returnArr = []
+        for (let i  =0; i < parks.length; i++){
+            const park = parks[i]
+            const {designation, fullName, name, parkCode, states, url} = park;
+            returnArr.push(
+                    <div >
+                        <h4> {fullName}</h4>
+                        <button onClick = {()=> {
+                            console.log(fullName)
+                            viewParkDetails(fullName)  
+                            }}> viw parketails</button>
+                        <button onClick = {()=> {
+                            viewImages(parkCode)
+                            
+                            }}> view images</button>
+                        </div>
+
+                )
+        }
+        console.log(returnArr)
+        return returnArr
+    }
+    
     if (activities.length == 0){
         console.log("empty")
     }
@@ -99,7 +123,7 @@ const Header = () => {
     console.log("halfway")
     return (
         <div>
-            <h1>Activity</h1>
+            <h1>Activities yay ya </h1>
             <h3>Pick Aity</h3>
 
             
@@ -108,10 +132,7 @@ const Header = () => {
             
             {viewActivity1(activities)}
         
-            {
-
-
-            }
+            {viewAllParks(parks)}
         
             {
 
@@ -134,22 +155,22 @@ const Header = () => {
             // }),
 
             
-            parks.map((park)=> {
-                const {designation, fullName, name, parkCode, states, url} = park;
-                return (
-                    <div >
-                        <h4> {fullName}</h4>
-                        <button onClick = {()=> {
-                            console.log(fullName)
-                            viewParkDetails(fullName)  
-                            }}> viw parketails</button>
-                        <button onClick = {()=> {
-                            viewImages(parkCode)
+            // parks.map((park)=> {
+            //     const {designation, fullName, name, parkCode, states, url} = park;
+            //     return (
+            //         <div >
+            //             <h4> {fullName}</h4>
+            //             <button onClick = {()=> {
+            //                 console.log(fullName)
+            //                 viewParkDetails(fullName)  
+            //                 }}> viw parketails</button>
+            //             <button onClick = {()=> {
+            //                 viewImages(parkCode)
                             
-                            }}> view images</button>
-                        </div>
-                );
-            }) ,
+            //                 }}> view images</button>
+            //             </div>
+            //     );
+            // }) ,
             parkDetails.map((parkDetail)=> {
                 const {designation, fullName, name, parkCode, states, url} = parkDetail[0];
                 console.log(parkDetail[0])
