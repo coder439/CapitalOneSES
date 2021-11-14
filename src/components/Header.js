@@ -72,6 +72,7 @@ const Header = () => {
         })
 
     }
+
     const viewActivity1 = (activities)=> {
         var returnArr = []
         for (let i =0; i < activities.length; i++ )
@@ -83,7 +84,7 @@ const Header = () => {
 
             <div >
             <h4>{name}</h4>
-            <button onClick = {()=> viewParks(id)}>views for activity</button>
+            <button onClick = {()=> viewParks(id)}>view parks</button>
             </div>
         )
         }
@@ -115,6 +116,97 @@ const Header = () => {
         console.log(returnArr)
         return returnArr
     }
+    const viewAllParkDetails = (parkDetails)=> {
+        var returnArr = []
+        for (let i = 0; i < parkDetails.length; i++){
+            const parkDetail = parkDetails[i]
+            console.log(parkDetail)
+            const {designation, fullName, name, parkCode, states, url} = parkDetail[0];
+            console.log(designation)
+            returnArr.push (
+                <div>
+                    <h1>{fullName}</h1>
+                    <h2>Designation: {designation}</h2>
+                    <h4>Location: {states}</h4>
+                    <h4>Park Code: {parkCode}</h4>
+                    <h4>Link to park's webpage where you can learn more: {url}</h4>
+                    
+                    </div>
+            );
+
+
+        }
+        return returnArr
+    }
+    const viewAllWebCamDetails = (webCams) =>{
+        var returnArr = []
+        console.log(webCams)
+        for (let i =0; i < webCams.length; i++){
+            const webCam = webCams[i]
+            const {description, images, isStreaming, latitude, longitude, relatedParks, status, statusMessage, tags, title, url} = webCam
+            returnArr.push (
+                <div>
+                    <h1>{description}</h1>
+                    <h3>{isStreaming}</h3>
+                </div>
+            )
+       
+        }
+        return returnArr
+
+
+    }
+    const viewHeader = () =>{
+        var returnArr = []
+        console.log(activities.length)
+        console.log(parks.length)
+        console.log(parkDetails.length)
+        console.log(webCams.length)
+        if (activities.length != 0 && parks.length == 0 && webCams.length == 0  && parkDetails.length == 0){
+            console.log("yo yo yo yo ")
+            returnArr.push(
+
+                <div>
+                    <h1>
+                        View All available activities below
+                    </h1>
+                </div>
+
+            )
+            return returnArr
+
+        }
+        else if (activities.length == 0 && parks.length != 0 && webCams.length == 0  && parkDetails.length == 0){
+            returnArr.push(
+                <div>
+                    <h1> View All available parks below</h1>
+                </div>
+            )
+            return returnArr
+
+        }
+        else if (activities.length == 0 && parks.length == 0 && webCams.length != 0  && parkDetails.length == 0){
+            returnArr.push(
+                <div>
+                    <h1> View All web cam data below</h1>
+                </div>
+            )
+            return returnArr
+
+        }
+        else if (activities.length == 0 && parks.length == 0 && webCams.length == 0  && parkDetails.length != 0){
+            returnArr.push(
+                <div>
+                    <h1> View All park details data below</h1>
+                </div>
+            )
+            return returnArr
+
+        }
+        
+    
+    }
+    
 
     async function createsReload (){
         console.log("in reload")
@@ -130,24 +222,12 @@ const Header = () => {
                 copyList.push(activitiesList[i])
             }
     
-        }).then(setActivities([]))
-
-
-
-
-
-
-
-
-
+        }).then(setActivities([]), setParks([]), setWebCams([]), setParkDetails([]))
         
     }
 
     
-    if (activities.length == 0){
-        console.log("empty")
-    }
-    var sampleArr = ["bob", "jpe", "mat"]
+
     console.log("halfway")
     return (
         <div>
@@ -156,82 +236,15 @@ const Header = () => {
                             
                             
                             }}> reload</button>
+            <h6> Please use above reload button instead of the actual reload button</h6>
             
-            <h1>s ya </h1>
-            <h3>PiAity</h3>
-
-            
-            <h5> depssion</h5>
-
-            
+            {viewHeader()}
             {viewActivity1(activities)}
         
             {viewAllParks(parks)}
-        
-            {
-
-              
-
-            // activities.map((activity) => {
-            //     const {id, name, parks} = activity;
-            //     console.log(viewActivity1(activity))
-            //     // return (
-            //     //     viewActivity1(activity)
-            //     // )
-                
-            //     // return (
-            //     // <div >
-            //     //     <h4>plz help</h4>
-            //     //     <h4>{name}</h4>
-            //     //     {/* <button onClick = {()=> viewParks(id)}>views for activity</button> */}
-            //     //     </div>
-            //     // );
-            // }),
-
-            
-            // parks.map((park)=> {
-            //     const {designation, fullName, name, parkCode, states, url} = park;
-            //     return (
-            //         <div >
-            //             <h4> {fullName}</h4>
-            //             <button onClick = {()=> {
-            //                 console.log(fullName)
-            //                 viewParkDetails(fullName)  
-            //                 }}> viw parketails</button>
-            //             <button onClick = {()=> {
-            //                 viewImages(parkCode)
-                            
-            //                 }}> view images</button>
-            //             </div>
-            //     );
-            // }) ,
-            parkDetails.map((parkDetail)=> {
-                const {designation, fullName, name, parkCode, states, url} = parkDetail[0];
-                console.log(parkDetail[0])
-                return (
-                    <div>
-                        <h1>{fullName}</h1>
-                        <h2>Designation: {designation}</h2>
-                        <h4>Location: {states}</h4>
-                        <h4>Park Code: {parkCode}</h4>
-                        <h4>Link to park's webpage where you can learn more: {url}</h4>
-                        
-                        </div>
-                );
-                
-            }),
-            webCams.map((webCam)=> {
-                const {description, images, isStreaming, latitude, longitude, relatedParks, status, statusMessage, tags, title, url} = webCam
-                return (
-
-                    <div>
-                        <h1>{description}</h1>
-                        <h3>{isStreaming}</h3>
-
-                    </div>
-                )
-            })}
-       
+            {viewAllParkDetails(parkDetails)}
+            {viewAllWebCamDetails(webCams)}      
+          
     
         </div>
     );
