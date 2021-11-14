@@ -3,7 +3,7 @@ import React from 'react'
 import { PLACEHOLDERS_FLIPPED_ALIAS } from "@babel/types"
 const Header = () => {
     console.log("rerender")
-    const Url = "https://developer.nps.gov/api/v1/activities/parks?&api_key=GJZkeQAgM3dJ2lm8QEt1MzU6bwxulbHAbb2W3NxS"
+    const Url = "https://developer.nps.gov/api/v1/activities/parks?&api_key=EHqD6lQUXiVN62N3hVIQzyCITN4z8RpAjTh5fu01"
     var copyList = []
     fetch(Url)
     .then(data=>{return data.json()})
@@ -32,7 +32,8 @@ const Header = () => {
 
     const viewImages = (parkCode)=>{
         console.log("inside view Images")
-        const URL  ='https://developer.nps.gov/api/v1/webcams?parkCode=' + parkCode + '&&api_key=dNX918hslulco1WPSr7Vcgc8pDFklxHQXVvQvcvk'
+        console.log(parkCode)
+        const URL  ='https://developer.nps.gov/api/v1/webcams?parkCode=' + parkCode + '&&api_key=EHqD6lQUXiVN62N3hVIQzyCITN4z8RpAjTh5fu01'
         fetch(URL)
         .then(data=> {return data.json()})
         .then(res=>{
@@ -93,6 +94,8 @@ const Header = () => {
 
     }
     const viewAllParks = (parks)=>{
+        console.log("park data below")
+        console.log(parks)
         var returnArr = []
         for (let i  =0; i < parks.length; i++){
             const park = parks[i]
@@ -103,7 +106,7 @@ const Header = () => {
                         <button onClick = {()=> {
                             console.log(fullName)
                             viewParkDetails(fullName)  
-                            }}> viw parketails</button>
+                            }}> view park details</button>
                         <button onClick = {()=> {
                             viewImages(parkCode)
                             
@@ -152,13 +155,39 @@ const Header = () => {
             )
             return returnArr
         }
+        const getImages = (images)=>{
+            var returnArr1 = []
+            if (images.length == 0){
+
+                return <div>
+                    <h4> Unfortunately no images are currently available from this specific webcam</h4>
+                </div>
+
+            }
+            else {
+                for (let i = 0; i < images.length; i++){
+                    console.log(images[i])
+                    const {imageUrl, altText, caption, credit, crops, description, title, url} = images[i]
+                    console.log(url)
+                    returnArr1.push(
+                        <div>
+                        <h6> image below</h6>
+                        <img src={url}  width="240" height="180"  />
+                        </div>
+
+                    )
+
+                }
+            }
+            return returnArr1
+        }
 
 
         for (let i =0; i < webCams.length; i++){
             const webCam = webCams[i]
-            const {description, images, isStreaming, latitude, longitude, relatedParks, status, statusMessage, tags, title, url} = webCam
+            const {description, id, images, isStreaming, latitude, longitude, relatedParks, status, statusMessage, tags, title, url} = webCam
             console.log(description)
-            console.log(images[0])
+            console.log(images)
             console.log(isStreaming)
             console.log(longitude)
             console.log(latitude)
@@ -172,8 +201,17 @@ const Header = () => {
                 <div>
                     
 
-                    <h4>{description}</h4>
-                    <h4>{isStreaming}</h4>
+                    <h2>{title}</h2>
+                    {/* var img = document.createElement('img') */}
+                    {/* img.src = {images[0]} */}
+                    {/* document.getElementById('root').appendChild(img) */}
+                    {getImages(images)}
+
+                    <h5> Status: {status}</h5>
+                    <h6> Coordinates of park camera: {latitude} , {longitude}</h6>
+                    <p> Description: {description}</p>
+                    <p> Related tags: {tags}</p>
+                    <p> url to site: {url}</p>
                 </div>
             )
        
@@ -236,7 +274,7 @@ const Header = () => {
 
     async function createsReload (){
         console.log("in reload")
-        const Url = "https://developer.nps.gov/api/v1/activities/parks?&api_key=GJZkeQAgM3dJ2lm8QEt1MzU6bwxulbHAbb2W3NxS"
+        const Url = "https://developer.nps.gov/api/v1/activities/parks?&api_key=EHqD6lQUXiVN62N3hVIQzyCITN4z8RpAjTh5fu01"
         var copyList = []
         fetch(Url)
         .then(data=>{return data.json()})
