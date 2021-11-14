@@ -146,8 +146,10 @@ const Header = () => {
             const {description, images, isStreaming, latitude, longitude, relatedParks, status, statusMessage, tags, title, url} = webCam
             returnArr.push (
                 <div>
-                    <h1>{description}</h1>
-                    <h3>{isStreaming}</h3>
+                    
+
+                    <h4>{description}</h4>
+                    <h4>{isStreaming}</h4>
                 </div>
             )
        
@@ -168,7 +170,7 @@ const Header = () => {
 
                 <div>
                     <h1>
-                        View All available activities below
+                        View All available activities below!!
                     </h1>
                 </div>
 
