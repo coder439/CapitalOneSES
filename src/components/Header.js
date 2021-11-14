@@ -3,7 +3,7 @@ import React from 'react'
 import { PLACEHOLDERS_FLIPPED_ALIAS } from "@babel/types"
 const Header = () => {
     console.log("rerender")
-    const Url = "https://developer.nps.gov/api/v1/activities/parks?&api_key=cNYkhRqddA3vLnK07hZ8gSh3XDabrHArxZ8hz5Xc"
+    const Url = "https://developer.nps.gov/api/v1/activities/parks?&api_key=GJZkeQAgM3dJ2lm8QEt1MzU6bwxulbHAbb2W3NxS"
     var copyList = []
     fetch(Url)
     .then(data=>{return data.json()})
@@ -20,7 +20,6 @@ const Header = () => {
     const [parkDetails, setParkDetails] = React.useState([]);
     const [webCams, setWebCams] = React.useState([]);
     
-    // this.forceUpdate();
    
     React.useEffect(() => {
 
@@ -112,9 +111,38 @@ const Header = () => {
 
                 )
         }
+
         console.log(returnArr)
         return returnArr
     }
+
+    async function createsReload (){
+        console.log("in reload")
+        const Url = "https://developer.nps.gov/api/v1/activities/parks?&api_key=GJZkeQAgM3dJ2lm8QEt1MzU6bwxulbHAbb2W3NxS"
+        var copyList = []
+        fetch(Url)
+        .then(data=>{return data.json()})
+        .then(res=>{
+            var activitiesList = (res.data)
+            setActivities(activitiesList)
+            console.log(activitiesList.length)
+            for (let i = 0; i <activitiesList.length; i++){
+                copyList.push(activitiesList[i])
+            }
+    
+        }).then(setActivities([]))
+
+
+
+
+
+
+
+
+
+        
+    }
+
     
     if (activities.length == 0){
         console.log("empty")
@@ -123,11 +151,17 @@ const Header = () => {
     console.log("halfway")
     return (
         <div>
-            <h1>Activities yay ya </h1>
-            <h3>Pick Aity</h3>
+             <button onClick = {()=> {
+                 createsReload()
+                            
+                            
+                            }}> reload</button>
+            
+            <h1>s ya </h1>
+            <h3>PiAity</h3>
 
             
-            <h5> depression</h5>
+            <h5> depssion</h5>
 
             
             {viewActivity1(activities)}
