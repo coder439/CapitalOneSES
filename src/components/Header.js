@@ -141,9 +141,33 @@ const Header = () => {
     const viewAllWebCamDetails = (webCams) =>{
         var returnArr = []
         console.log(webCams)
+        if (activities.length == 0 && parks.length == 0 && webCams.length == 0  && parkDetails.length == 0){
+            console.log("yo yo yo all empty")
+            returnArr.push(
+
+                <div>
+                    <h3> Unfortunately, no web cam data is available for this park. Please use the reload button above to navigate back to the home page</h3>
+                </div>
+
+            )
+            return returnArr
+        }
+
+
         for (let i =0; i < webCams.length; i++){
             const webCam = webCams[i]
             const {description, images, isStreaming, latitude, longitude, relatedParks, status, statusMessage, tags, title, url} = webCam
+            console.log(description)
+            console.log(images[0])
+            console.log(isStreaming)
+            console.log(longitude)
+            console.log(latitude)
+            console.log(relatedParks)
+            console.log(status)
+            console.log(statusMessage)
+            console.log(tags)
+            console.log(title)
+            console.log(url)
             returnArr.push (
                 <div>
                     
