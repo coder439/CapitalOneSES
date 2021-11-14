@@ -14,36 +14,13 @@ const Header = () => {
         }
 
     }).then(console.log(copyList))
-    console.log(copyList.length)
+    
     const [activities , setActivities] = React.useState(copyList);
     const [parks, setParks] = React.useState([]);
     const [parkDetails, setParkDetails] = React.useState([]);
     const [webCams, setWebCams] = React.useState([]);
     
     // this.forceUpdate();
-
-
-
-    const Url1 = "https://developer.nps.gov/api/v1/activities/parks?&api_key=cNYkhRqddA3vLnK07hZ8gSh3XDabrHArxZ8hz5Xc"
-    var copyList = []
-    fetch(Url1)
-    .then(data=>{return data.json()})
-    .then(res=>{
-        var activitiesList = (res.data)
-        for (let i = 0; i <activitiesList.length; i++){
-            copyList.push(activitiesList[i])
-        }
-
-    }).
-    then(console.log(copyList.length))
-
-
-
-
-
-
-
-
    
     React.useEffect(() => {
 
@@ -54,8 +31,6 @@ const Header = () => {
 
     }, [parkDetails, parks, webCams, activities])
 
-
-    
     const viewImages = (parkCode)=>{
         console.log("inside view Images")
         const URL  ='https://developer.nps.gov/api/v1/webcams?parkCode=' + parkCode + '&&api_key=dNX918hslulco1WPSr7Vcgc8pDFklxHQXVvQvcvk'
@@ -65,7 +40,7 @@ const Header = () => {
             setWebCams(res.data)
             console.log(webCams)
         })
-        
+        .then(setActivities([]), setParks([]), setParkDetails([]))
 
     }
     const viewParks = (id)=> {
@@ -90,7 +65,7 @@ const Header = () => {
             const parkDetailsArr = []
             parkDetailsArr.push(parkDetailObj)
             setParkDetails(parkDetailsArr)
-            // console.log(parkDetailsArr)
+            console.log(parkDetailsArr)
             setParks([])
             setActivities([])
             
@@ -99,8 +74,6 @@ const Header = () => {
 
     }
     const viewActivity1 = (activities)=> {
-        console.log("activites from activity method")
-        console.log(activities)
         var returnArr = []
         for (let i =0; i < activities.length; i++ )
         {
@@ -115,7 +88,7 @@ const Header = () => {
             </div>
         )
         }
-        // console.log(parks)
+        console.log(parks)
             return returnArr
 
     }
@@ -139,7 +112,7 @@ const Header = () => {
 
                 )
         }
-        // console.log(returnArr)
+        console.log(returnArr)
         return returnArr
     }
     const viewAllParkDetails = (parkDetails) =>{
@@ -153,7 +126,8 @@ const Header = () => {
                         <h2>Designation: {designation}</h2>
                         <h4>Location: {states}</h4>
                         <h4>Park Code: {parkCode}</h4>
-                        <h4>Link to park's webpage where you can learn more: {url}</h4>                 
+                        <h4>Link to park's webpage where you can learn more: {url}</h4>
+                        
                 </div>
 
 
@@ -162,17 +136,13 @@ const Header = () => {
 
 
         }
-        // console.log(returnArr)
+        console.log(returnArr)
         return returnArr
     }
     const viewWebCams = (webCams) => {
-        console.log("from webcam method")
-        console.log(activities)
-        console.log(activities.length)
         var returnArr = []
         for (let i  = 0; i < webCams.length; i++){
             const webCam = webCams[i]
-
             const {description, images, isStreaming, latitude, longitude, relatedParks, status, statusMessage, tags, title, url} = webCam
             returnArr.push (
 
@@ -182,69 +152,34 @@ const Header = () => {
 
                 </div>
             )
+            
+
         }
-        if (returnArr.length == 0 && activities.length == 0 && parks.length == 0 && parkDetails.length == 0){
-            return <div> No web cam data available, sorry</div>
-        }
-        else{
+        console.log(returnArr)
         return returnArr
-        }
     }
-    const viewHomePage = () =>{
-
-
-        // const Url = "https://developer.nps.gov/api/v1/activities/parks?&api_key=cNYkhRqddA3vLnK07hZ8gSh3XDabrHArxZ8hz5Xc"
-        // var copyList = []
-        // console.log("home page")
-        // fetch(Url)
-        // .then(data=>{return data.json()})
-        // .then(res=>{
-        //     var activitiesList = (res.data)
-        //     for (let i = 0; i <activitiesList.length; i++){
-        //         copyList.push(activitiesList[i])
-        //     }
-        // }).then(setActivities(copyList)).then(
-        //     console.log("1"),
-        //     setParkDetails([]),
-        //     setParks([]),
-        //     setWebCams([]),
-        //     console.log(activities.length),
-        //     console.log("5"),
-
-        //     )
-
-
+    
+    if (activities.length == 0){
+        console.log("empty")
     }
-
-
-
-
+    var sampleArr = ["bob", "jpe", "mat"]
+    console.log("halfway")
     return (
         <div>
-                       <button onClick = {()=> {   
-                            viewHomePage() 
-                            }}> Refresh/View Activities</button>
-            <h1>set activities</h1>
-            <h3>Piity</h3>
+            <h1>Activites yay ya </h1>
+            <h3>Pick Aity</h3>
 
             
             <h5> whyyy</h5>
-            {console.log("before return")}
+
             
             {viewActivity1(activities)}
         
             {viewAllParks(parks)}
             {viewAllParkDetails(parkDetails)}
-            {
-            
+            {viewWebCams(webCams)}
         
-            viewWebCams(webCams)
-            
-            
-            }
-            {/* { */}
-            </div>
-    );
+            {
 
               
 
@@ -296,21 +231,21 @@ const Header = () => {
             //     );
                 
             // }),
-            // webCams.map((webCam)=> {
-            //     const {description, images, isStreaming, latitude, longitude, relatedParks, status, statusMessage, tags, title, url} = webCam
-            //     return (
+            webCams.map((webCam)=> {
+                const {description, images, isStreaming, latitude, longitude, relatedParks, status, statusMessage, tags, title, url} = webCam
+                return (
 
-            //         <div>
-            //             <h1>{description}</h1>
-            //             <h3>{isStreaming}</h3>
+                    <div>
+                        <h1>{description}</h1>
+                        <h3>{isStreaming}</h3>
 
-            //         </div>
-            //     )
-            // })}
+                    </div>
+                )
+            })}
        
     
-        // </div>
-    // );
+        </div>
+    );
 
 };
 
