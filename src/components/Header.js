@@ -115,49 +115,6 @@ const Header = () => {
         console.log(returnArr)
         return returnArr
     }
-    const viewAllParkDetails = (parkDetails) =>{
-        var returnArr = []
-        for (let i = 0; i < parkDetails.length; i++){
-            const parkDetail = parkDetails[i]
-            const {designation, fullName, name, parkCode, states, url} = parkDetail[0];
-            returnArr.push(
-                <div>
-                        <h1>{fullName}</h1>
-                        <h2>Designation: {designation}</h2>
-                        <h4>Location: {states}</h4>
-                        <h4>Park Code: {parkCode}</h4>
-                        <h4>Link to park's webpage where you can learn more: {url}</h4>
-                        
-                </div>
-
-
-
-            )
-
-
-        }
-        console.log(returnArr)
-        return returnArr
-    }
-    const viewWebCams = (webCams) => {
-        var returnArr = []
-        for (let i  = 0; i < webCams.length; i++){
-            const webCam = webCams[i]
-            const {description, images, isStreaming, latitude, longitude, relatedParks, status, statusMessage, tags, title, url} = webCam
-            returnArr.push (
-
-                <div>
-                    <h1>{description}</h1>
-                    <h3>{isStreaming}</h3>
-
-                </div>
-            )
-            
-
-        }
-        console.log(returnArr)
-        return returnArr
-    }
     
     if (activities.length == 0){
         console.log("empty")
@@ -166,18 +123,16 @@ const Header = () => {
     console.log("halfway")
     return (
         <div>
-            <h1>Activites yay ya </h1>
+            <h1>Activities yay ya </h1>
             <h3>Pick Aity</h3>
 
             
-            <h5> whyyy</h5>
+            <h5> depression</h5>
 
             
             {viewActivity1(activities)}
         
             {viewAllParks(parks)}
-            {viewAllParkDetails(parkDetails)}
-            {viewWebCams(webCams)}
         
             {
 
@@ -216,21 +171,21 @@ const Header = () => {
             //             </div>
             //     );
             // }) ,
-            // parkDetails.map((parkDetail)=> {
-            //     const {designation, fullName, name, parkCode, states, url} = parkDetail[0];
-            //     console.log(parkDetail[0])
-            //     return (
-            //         <div>
-            //             <h1>{fullName}</h1>
-            //             <h2>Designation: {designation}</h2>
-            //             <h4>Location: {states}</h4>
-            //             <h4>Park Code: {parkCode}</h4>
-            //             <h4>Link to park's webpage where you can learn more: {url}</h4>
+            parkDetails.map((parkDetail)=> {
+                const {designation, fullName, name, parkCode, states, url} = parkDetail[0];
+                console.log(parkDetail[0])
+                return (
+                    <div>
+                        <h1>{fullName}</h1>
+                        <h2>Designation: {designation}</h2>
+                        <h4>Location: {states}</h4>
+                        <h4>Park Code: {parkCode}</h4>
+                        <h4>Link to park's webpage where you can learn more: {url}</h4>
                         
-            //             </div>
-            //     );
+                        </div>
+                );
                 
-            // }),
+            }),
             webCams.map((webCam)=> {
                 const {description, images, isStreaming, latitude, longitude, relatedParks, status, statusMessage, tags, title, url} = webCam
                 return (
