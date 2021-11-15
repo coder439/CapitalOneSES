@@ -14,3 +14,19 @@
 #reloadText{
     color: red
 }
+.parks{
+    style: "border:3px"; 
+    border-style:solid;
+     border-color:#D3D3D3;
+      padding: 1em;
+}
+.activities{
+    style: "border:3px"; 
+    border-style:solid;
+     border-color:#D3D3D3;
+      padding: 1em;
+}
+.button{
+
+    margin:10px
+}
