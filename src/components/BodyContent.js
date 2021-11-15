@@ -30,9 +30,9 @@ const BodyContent = () => {
       .then((res) => {
         if (res.data.length == 0){
           console.log("empty res")
-          // res.data.push(
-          //   <div> empty</div>
-          // )
+          res.data.push(
+            5
+          )
         }
         setWebCams(res.data); setParks([]); setActivities([]); setParkDetails([])
       });
@@ -206,13 +206,9 @@ const BodyContent = () => {
   };
   const viewAllWebCamDetails = (webCams) => {
     var returnArr = [];
+    console.log(typeof webCams[0])
     console.log(webCams);
-    if (
-      activities.length == 0 &&
-      parks.length == 0 &&
-      webCams.length == 0 &&
-      parkDetails.length == 0
-    ) {
+    if ( webCams.length >0  && webCams[0] === 5) {
       console.log("yo yo yo all empty");
       returnArr.push(
         <div>
