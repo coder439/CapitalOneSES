@@ -32,6 +32,7 @@ const BodyContent = () => {
 
   React.useEffect(() => {
     console.log("Hi");
+    // setParkDetails(parkDetails)
   }, [parkDetails, parks, webCams, activities]);
 
   const viewImages = (parkCode) => {
@@ -82,14 +83,16 @@ const BodyContent = () => {
         return data.json()
       })
       .then((res)=> {
-        // setParkDetails(res)
+        console.log(res)
+         setParkDetails(res)
+         setParks([])
+         setActivities([])
+         setWebCams([])
       })
-      const parkDetailsArr = [];
-      parkDetailsArr.push(parkDetailObj);
-      setParkDetails(parkDetailsArr);
-      setParks([])
-      setActivities([])
-      setWebCams([])
+      // const parkDetailsArr = [];
+      // parkDetailsArr.push(parkDetailObj);
+      // setParkDetails(parkDetailsArr);
+
       // console.log(parkDetailsArr);
     });
   };
@@ -145,24 +148,62 @@ const BodyContent = () => {
     return returnArr;
   };
   const viewAllParkDetails = (parkDetails) => {
-    var returnArr = [];
-    for (let i = 0; i < parkDetails.length; i++) {
-      const parkDetail = parkDetails[i];
-      console.log(parkDetail);
-      const { designation, fullName, name, parkCode, states, url } =
-        parkDetail[0];
-      console.log(designation);
-      returnArr.push(
-        <div>
-          <h1>{fullName}</h1>
-          <h2>Designation: {designation}</h2>
-          <h4>Location: {states}</h4>
-          <h4>Park Code: {parkCode}</h4>
-          <h4>Link to park's webpage where you can learn more: {url}</h4>
-        </div>
-      );
+    let parkDetailsData = parkDetails.data
+    console.log(parkDetailsData)
+    var returnArr = []
+    if (parkDetailsData){
+      if (parkDetailsData.length>0){
+        console.log(parkDetailsData.length)
+        parkDetailsData.map((parkDatailsDataObj)=>{
+          console.log(parkDatailsDataObj)
+          const {activities, addresses, contacts, description, designation, directionsInfo, directionsUrl, entranceFees, entrancePasses, fees, fullName, id, images, latLong, latitude, longitude, name, operatingHours, parkCode, states, topic, url, weatherInfo} = parkDatailsDataObj
+          console.log(weatherInfo)
+          returnArr.push(
+            <div>
+              <h1> {fullName}</h1>
+              <p>{description}</p>
+              
+
+
+
+
+            </div>
+
+
+          )
+        })
+
+
+      }
     }
-    return returnArr;
+    return returnArr
+      // {parkDetailsData.map((parkDetailsDataObj)=>{
+      //   console.log(parkDetailsDataObj)
+      // })}
+
+
+
+    
+
+    // console.log(parkDetails)
+    // var returnArr = [];
+    // for (let i = 0; i < parkDetails.length; i++) {
+    //   const parkDetail = parkDetails[i];
+    //   console.log(parkDetail);
+    //   const { designation, fullName, name, parkCode, states, url } =
+    //     parkDetail[0];
+    //   console.log(designation);
+    //   returnArr.push(
+    //     <div>
+    //       <h1>{fullName}</h1>
+    //       <h2>Designation: {designation}</h2>
+    //       <h4>Location: {states}</h4>
+    //       <h4>Park Code: {parkCode}</h4>
+    //       <h4>Link to park's webpage where you can learn more: {url}</h4>
+    //     </div>
+    //   );
+    // }
+    // return returnArr;
   };
   const viewAllWebCamDetails = (webCams) => {
     var returnArr = [];
