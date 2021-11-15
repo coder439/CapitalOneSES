@@ -7,12 +7,9 @@ const BodyContent = () => {
   const [parkDetails, setParkDetails] = React.useState([]);
   const [webCams, setWebCams] = React.useState([]);
 
-  console.log("rerender");
-  const Url =
-    "https://developer.nps.gov/api/v1/activities/parks?&api_key=q8GWnNoCUOR2WCSbRcNAmBKYbIcN9Qy4zqbcz1JN";
-
+  const fetchActivitiesUrl = "https://developer.nps.gov/api/v1/activities/parks?&api_key=q8GWnNoCUOR2WCSbRcNAmBKYbIcN9Qy4zqbcz1JN";
   if (activities.length <= 0  && parks.length <= 0 && parkDetails.length == 0 && webCams.length == 0) {
-    fetch(Url)
+    fetch(fetchActivitiesUrl)
       .then((data) => {
         return data.json();
       })
@@ -25,15 +22,18 @@ const BodyContent = () => {
   }, [parkDetails, parks, webCams, activities]);
 
   const viewImages = (parkCode) => {
-    const URL =
-      "https://developer.nps.gov/api/v1/webcams?parkCode=" +
-      parkCode +
-      "&&api_key=EHqD6lQUXiVN62N3hVIQzyCITN4z8RpAjTh5fu01";
-    fetch(URL)
+    const imagesUrl = "https://developer.nps.gov/api/v1/webcams?parkCode=" + parkCode + "&&api_key=EHqD6lQUXiVN62N3hVIQzyCITN4z8RpAjTh5fu01";
+    fetch(imagesUrl)
       .then((data) => {
         return data.json();
       })
       .then((res) => {
+        if (res.data.length == 0){
+          console.log("empty res")
+          // res.data.push(
+          //   <div> empty</div>
+          // )
+        }
         setWebCams(res.data); setParks([]); setActivities([]); setParkDetails([])
       });
   };
@@ -43,6 +43,7 @@ const BodyContent = () => {
     setActivities([]);
     setParks(parkArray);
     setParkDetails([]);
+    setWebCams([])
   };
   const viewParkDetails = (fullName) => {
     const myPromise = new Promise(() => {
@@ -59,7 +60,7 @@ const BodyContent = () => {
     });
   };
 
-  const viewActivity1 = (activities) => {
+  const viewAllActivities = (activities) => {
     var returnArr = [];
     for (let i = 0; i < activities.length; i++) {
       const activity = activities[i];
@@ -74,62 +75,58 @@ const BodyContent = () => {
     return returnArr;
   };
   const viewAllParks = (parks) => {
-    console.log(parks);
-    var returnArr = [];
+    var parkArray = [];
     for (let i = 0; i < parks.length; i++) {
       const park = parks[i];
       const { designation, fullName, name, parkCode, states, url } = park;
-      returnArr.push(
+      parkArray.push(
         <div className="parks">
           <h2> {fullName}</h2>
           <button className="button"
             onClick={() => {
-              console.log(fullName);
               viewParkDetails(fullName);
-            }}
-          >
+            }}>
             view park details
           </button>
           <button className="button"
             onClick={() => {
-              viewImages(parkCode);}}>
-            view images
+              viewImages(parkCode);
+              }}>
+              view images
           </button>
         </div>
       );
     }
-    return returnArr;
+    return parkArray;
   };
   const viewAllParkDetails = (parkDetails) => {
+
     const viewParkActivities = (parkActivities)=>{
       var activityStr = ""
-       var returnArr1 = []
+       var parkActivitiesArray = []
        parkActivities.map((parkActivity)=> {
          const {id, name} = parkActivity
          activityStr  = activityStr + ", " + name
        })
-       console.log(returnArr1)
        activityStr = activityStr.substring(1)
-       returnArr1.push(activityStr)
-
-       return returnArr1
-
+       parkActivitiesArray.push(activityStr)
+       return parkActivitiesArray
     };
+
     const viewOperatingHours = (operatingHours)=>{
-      var returnArr2 = []
-      operatingHours.map((operatingHour)=>{
+      var operatingHoursArray = []
+      operatingHours.map((operatingHour)=>
+      {
         const {description, exceptions, name, standardHours} = operatingHour;
-        returnArr2.push(
-          <p> {description}</p>
-        )
+        operatingHoursArray.push( <p> {description}</p>)
       })
-      return returnArr2 
+      return operatingHoursArray 
     }
     const viewFees = (fees)=>{
-      var returnArr3 = []
+      var feesArray = []
       fees.map((fee)=> {
         const {cost, description, title  } = fee
-        returnArr3.push
+        feesArray.push
         (
           <div>
               <h6> {title}</h6>
@@ -138,35 +135,33 @@ const BodyContent = () => {
           </div>
         )
       })
-    return returnArr3
+    return feesArray
     }
     const viewEmails = (emails)=> {
-      var returnArr4 = []
+      var emailsArray = []
       emails.map((email)=> {
         const {descrption, emailAddress} = email
-        returnArr4.push
+        emailsArray.push
         (
           <p> {emailAddress}</p>
         )
       })
-      return returnArr4
+      return emailsArray 
     }
     const viewPhoneNumbers = (phoneNumbers)=>{
-      var returnArr5 = []
+      var phoneNumbersArray = []
       phoneNumbers.map((phoneNumberObj)=>{
         const {desciption, extension, phoneNumber, type} = phoneNumberObj
-        returnArr5.push(
+        phoneNumbersArray.push(
           <div>
             <p> {type}: {phoneNumber}</p>
           </div>
         )
       })
-      return returnArr5
-
+      return phoneNumbersArray
     }
-    
     let parkDetailsData = parkDetails.data
-    var returnArr = []
+    var parkDetailsArray = []
     if (parkDetailsData){
       if (parkDetailsData.length>0){
         console.log(parkDetailsData.length)
@@ -175,7 +170,7 @@ const BodyContent = () => {
           const {activities, addresses, contacts, description, designation, directionsInfo, directionsUrl, entranceFees, entrancePasses, fees, fullName, id, images, latLong, latitude, longitude, name, operatingHours, parkCode, states, topic, url, weatherInfo} = parkDatailsDataObj
           const {emailAddresses, phoneNumbers} = contacts;
           console.log(latLong)
-          returnArr.push(
+          parkDetailsArray.push(
             <div>
               <h1> {fullName}</h1>
               <h3> Operating Hours</h3>
@@ -198,10 +193,7 @@ const BodyContent = () => {
               <p>{directionsUrl}</p>
               <h3> Activities available</h3>
                 {viewParkActivities(activities)}
-
-
             </div>
-
 
           )
         })
@@ -209,7 +201,7 @@ const BodyContent = () => {
 
       }
     }
-    return returnArr
+    return parkDetailsArray
      
   };
   const viewAllWebCamDetails = (webCams) => {
@@ -348,7 +340,7 @@ const BodyContent = () => {
   return (
     <div className="background-green">
       <div className="header">{viewHeader()}</div>
-      {viewActivity1(activities)}
+      {viewAllActivities(activities)}
 
       {viewAllParks(parks)}
       {viewAllParkDetails(parkDetails)}
