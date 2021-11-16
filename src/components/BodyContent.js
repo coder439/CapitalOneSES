@@ -1,11 +1,12 @@
 import React from "react";
 import "./BodyContent.css";
 const BodyContent = () => {
+  // setting up useState hooks
   const [activities, setActivities] = React.useState([]);
   const [parks, setParks] = React.useState([]);
   const [parkDetails, setParkDetails] = React.useState([]);
   const [webCams, setWebCams] = React.useState([]);
-
+  // if all state arrays are empty, fetch activities and use them to set the activities state
   const fetchActivitiesUrl = "https://developer.nps.gov/api/v1/activities/parks?&api_key=q8GWnNoCUOR2WCSbRcNAmBKYbIcN9Qy4zqbcz1JN";
   if (activities.length <= 0  && parks.length <= 0 && parkDetails.length == 0 && webCams.length == 0) {
     fetch(fetchActivitiesUrl)
@@ -15,16 +16,18 @@ const BodyContent = () => {
       })
       .then((res) => 
       {
-        var activitiesList = res.data;
+        let activitiesList = res.data;
         return setActivities(activitiesList);
       });
   }
+  // set up useEffect hook
   React.useEffect(() => {}, [parkDetails, parks, webCams, activities]);
-
-  const viewImages = (parkCode) => 
+  // below are the functions that fetch data and set the state data accordingly
+  // function to fetch webCam data and setWebCams state
+  const viewWebCams = (parkCode) => 
   {
-    const imagesUrl = "https://developer.nps.gov/api/v1/webcams?parkCode=" + parkCode + "&&api_key=EHqD6lQUXiVN62N3hVIQzyCITN4z8RpAjTh5fu01";
-    fetch(imagesUrl)
+    const webCamUrl = "https://developer.nps.gov/api/v1/webcams?parkCode=" + parkCode + "&&api_key=EHqD6lQUXiVN62N3hVIQzyCITN4z8RpAjTh5fu01";
+    fetch(webCamUrl)
       .then((data) => 
       {
         return data.json();
@@ -33,21 +36,22 @@ const BodyContent = () => {
       {
         if (res.data.length == 0)
         {
-          console.log("empty res")
           res.data.push(5)
         }
         setWebCams(res.data); setParks([]); setActivities([]); setParkDetails([])
       });
   };
+  // function to access the parks specific to an activity selected by an user and set parks state accordingly
   const viewParks = (id) => 
   {
-    let park = activities.filter((activity) => activity.id == id);
-    let parkArray = park[0].parks;
+    let parksData = activities.filter((activity) => activity.id == id);
+    let parkArray = parksData[0].parks;
     setActivities([]);
     setParks(parkArray);
     setParkDetails([]);
     setWebCams([])
   };
+  // function to retrieve additional information for park and set parksDetails state accordingly
   const viewParkDetails = (fullName) => 
   {
     const myPromise = new Promise(() => 
@@ -66,14 +70,16 @@ const BodyContent = () => {
       })
     });
   };
+  // below are the functions that use the data in the current state to populate the DOM
+  // below function populates the DOM with a list of all activities
   const viewAllActivities = (activities) => 
   {
-    var allActivitiesArray = [];
+    let allActivitiesArray = [];
     for (let i = 0; i < activities.length; i++) 
     {
       const activity = activities[i];
       const { id, name, parks } = activity;
-      var stringKey = i.toString()
+      let stringKey = i.toString()
       allActivitiesArray.push
       (
         <div className="activities" key={stringKey}>
@@ -84,9 +90,10 @@ const BodyContent = () => {
     }
     return allActivitiesArray;
   };
+  // below function populates the DOM with a list of all parks
   const viewAllParks = (parks) => 
   {
-    var parkArray = [];
+    let parkArray = [];
     for (let i = 0; i < parks.length; i++) 
     {
       const park = parks[i];
@@ -103,7 +110,7 @@ const BodyContent = () => {
           </button>
           <button className="button"
             onClick={() => {
-              viewImages(parkCode);
+              viewWebCams(parkCode);
               }}>
               view images
           </button>
@@ -112,23 +119,26 @@ const BodyContent = () => {
     }
     return parkArray;
   };
+  // below function populates the DOM with all the park details information
   const viewAllParkDetails = (parkDetails) => 
   {
+    // below is a helper function used by viewAllParkDetails to access a string of all available activities for a specific park
     const viewParkActivities = (parkActivities)=>
     {
-      var activityStr = ""
-       var parkActivitiesArray = []
-       parkActivities.map((parkActivity)=> {
+      let activitiesStr = ""
+      let parkActivitiesArray = []
+      parkActivities.map((parkActivity)=> {
          const {id, name} = parkActivity
-         activityStr  = activityStr + ", " + name
-       })
-       activityStr = activityStr.substring(1)
-       parkActivitiesArray.push(activityStr)
+         activitiesStr  = activitiesStr + ", " + name
+      })
+      activitiesStr = activitiesStr.substring(1)
+       parkActivitiesArray.push(activitiesStr)
        return parkActivitiesArray
     };
+    // below is a helper function used by viewAllParkDetails to parse through the list of all operating hours for a specific park
     const viewOperatingHours = (operatingHours)=>
     {
-      var operatingHoursArray = []
+      let operatingHoursArray = []
       operatingHours.map((operatingHour)=>
       {
         const {description, exceptions, name, standardHours} = operatingHour;
@@ -136,12 +146,13 @@ const BodyContent = () => {
       })
       return operatingHoursArray 
     }
+    // below is a helper function used by viewAllParkDetails to parse through the list of all fees for a specific park
     const viewFees = (fees)=>
     {
-      var feesArray = []
+      let feesArray = []
       fees.map((fee)=> 
       {
-        const {cost, description, title  } = fee
+        const {cost, description, title} = fee
         feesArray.push
         (
           <div>
@@ -153,9 +164,10 @@ const BodyContent = () => {
       })
     return feesArray
     }
+    // below is a helper function used by viewAllParkDetails to parse through the list of all emails for a specific park
     const viewEmails = (emails)=> 
     {
-      var emailsArray = []
+      let emailsArray = []
       emails.map((email)=> 
       {
         const {descrption, emailAddress} = email
@@ -166,9 +178,10 @@ const BodyContent = () => {
       })
       return emailsArray 
     }
+    // below is a helpful function used by viewAllParkDetails to parse through a list of all phone numbers for a specific park
     const viewPhoneNumbers = (phoneNumbers)=>
     {
-      var phoneNumbersArray = []
+      let phoneNumbersArray = []
       phoneNumbers.map((phoneNumberObj)=>
       {
         const {desciption, extension, phoneNumber, type} = phoneNumberObj
@@ -182,18 +195,16 @@ const BodyContent = () => {
       return phoneNumbersArray
     }
     let parkDetailsData = parkDetails.data
-    var parkDetailsArray = []
+    let parkDetailsArray = []
     if (parkDetailsData)
     {
       if (parkDetailsData.length>0)
       {
-        console.log(parkDetailsData.length)
         parkDetailsData.map((parkDatailsDataObj)=>
         {
-          console.log(parkDatailsDataObj)
           const {activities, addresses, contacts, description, designation, directionsInfo, directionsUrl, entranceFees, entrancePasses, fees, fullName, id, images, latLong, latitude, longitude, name, operatingHours, parkCode, states, topic, url, weatherInfo} = parkDatailsDataObj
           const {emailAddresses, phoneNumbers} = contacts;
-          console.log(latLong)
+          // adding all the parkDetails as a jsx element to the parkDetailsArray (which is returned by the function)
           parkDetailsArray.push
           (
             <div>
@@ -245,9 +256,10 @@ const BodyContent = () => {
     }
     return parkDetailsArray
   };
+  // below function populates the DOM with all the web cam information
   const viewAllWebCamDetails = (webCams) => 
   {
-    var webCamDetailsArr = [];
+    let webCamDetailsArr = [];
     if ( webCams.length >0  && webCams[0] === 5) 
     {
       webCamDetailsArr.push
@@ -263,8 +275,9 @@ const BodyContent = () => {
       );
       return webCamDetailsArr;
     }
+    // below function is a helper function used by viewAllWebCamDetails to parse through a list of images specific to the webcam
     const getImages = (images) => {
-      var imagesArray = [];
+      let imagesArray = [];
       if (images.length == 0) {
         return (
           <div>
@@ -278,7 +291,6 @@ const BodyContent = () => {
       else 
       {
         for (let i = 0; i < images.length; i++) {
-          console.log(images[i]);
           const {imageUrl, altText, caption, credit, crops, description,title, url,} = images[i];
           imagesArray.push
           (
@@ -290,10 +302,11 @@ const BodyContent = () => {
       }
       return imagesArray;
     };
+    // below is a helper function used by viewAllWebCamDetails to parse through a list of all tags specific to a webcam
     const getTags = ((tags)=> 
     {
-      var tagsArray = []
-      var tagsString   = ""
+      let tagsArray = []
+      let tagsString   = ""
       for (let i = 0; i <tags.length; i++)
       {
         tagsString = tagsString + ", " + tags[i]
@@ -316,62 +329,59 @@ const BodyContent = () => {
           </h6>
           <p className="descriptionText"> Description: {description}</p>
           <p className="descriptionText"> Related tags: {getTags(tags)}</p>
-          <p className="descriptionText">  Site Link {url}</p>
+          <p className="descriptionText">  Site Link: {url}</p>
         </div>
       );
     }
     return webCamDetailsArr;
   };
-  const viewHeader = () => 
+  // below is a function that populates the title based on the current state of the app
+  const viewTitle = () => 
   {
-    var headerArray = [];
-    console.log(activities.length);
-    console.log(parks.length);
-    console.log(parkDetails.length);
-    console.log(webCams.length);
+    let titleArray = [];
     if (activities.length != 0 &&parks.length == 0 &&webCams.length == 0 &&parkDetails.length == 0) 
     {
-      headerArray.push
+      titleArray.push
       (
         <div>
-          <h1 className="tileTitle">Search Through Popular Outdoor Activities!</h1>
+          <h1 className="tileTitle">Search Through Popular Activities!</h1>
         </div>
       );
-      return headerArray;
+      return titleArray;
     } else if (activities.length == 0 && parks.length != 0 && webCams.length == 0 && parkDetails.length == 0) 
     {
-      headerArray.push
+      titleArray.push
       (
         <div>
           <h1 className="tileTitle"> View Parks That Offer Your Selected Activity</h1>
         </div>
       );
-      return headerArray;
+      return titleArray;
     } else if (activities.length == 0 && parks.length == 0 && webCams.length != 0 && parkDetails.length == 0) 
     {
-      headerArray.push
+      titleArray.push
       (
         <div>
           <h1 className="tileTitle"> View Images From Our Web Cams</h1>
         </div>
       );
-      return headerArray;
+      return titleArray;
     } 
     else if (activities.length == 0 && parks.length == 0 && webCams.length == 0 && parkDetails.length != 0) 
     {
-      headerArray.push
+      titleArray.push
       (
         <div>
           <h1 className="tileTitle">View Details of Selected Park</h1>
         </div>
       );
-      return headerArray;
+      return titleArray;
     }
   };
-
+  // below is the return statement for the component which assists in returning the data for the component
   return (
     <div className="background-green">
-      <div className="header">{viewHeader()}</div>
+      <div className="header">{viewTitle()}</div>
       {viewAllActivities(activities)}
 
       {viewAllParks(parks)}

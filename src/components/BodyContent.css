@@ -1,51 +1,47 @@
-.background-green{
+.background-green
+{
     background-color: #659DBD;
-
-    
-
-
 }
-#reloadText{
+#reloadText
+{
     color: red
 }
-.parks{
+.parks
+{
     border-style:solid;
      border-color:#D3D3D3;
       padding: 1em;
 }
-.activities{
+.activities
+{
     border-style:solid;
      border-color:#D3D3D3;
       padding: 1em;
 }
-.button{
-
+.button
+{
     margin:10px
 }
-.tileTitle{
+.tileTitle
+{
     font-family: "Georgia, 'Times New Roman', Times, serif";
-
-
 }
-.descriptionText{
+.descriptionText
+{
     text-align: left;
-
 }
-.imageTile{
+.imageTile
+{
     border-style:solid;
     border-color:#D3D3D3;
      padding: 1em;
-
-
 }
 p{
     font-family: "Georgia, 'Times New Roman', Times, serif";
-
-
 }
-.detailsContent{
+.detailsContent
+{
     border-style:solid;
     border-color:#D3D3D3;
     padding: 1em;
-
 }
